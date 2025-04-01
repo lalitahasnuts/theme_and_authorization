@@ -56,18 +56,19 @@ if (!fs.existsSync(cacheDir)) {
   app.get('/api/data', (req, res) => {
     const data = getCachedData('api_data');
     res.json(data);
-  });
+});
   
   // API для сохранения темы
   app.post('/theme', (req, res) => {
     const theme = req.body.theme;
     res.cookie('theme', theme, {
-      maxAge: 86400000, // 1 день
-      httpOnly: true,
-      sameSite: 'strict'
+        maxAge: 86400000, // 1 день
+        secure: true,      // Только через HTTPS
+        httpOnly: true,    // Защита от XSS
+        sameSite: 'strict' // Ограничение отправки cookie
     });
     res.sendStatus(200);
-  });
+});
 
 // Мидлвары
 app.use(express.json());
