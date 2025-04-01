@@ -30,7 +30,61 @@ function loadTheme() {
   }
   
   // Смена темы
-  document.getElementById('toggle-theme').addEventListener('click', () => {
+// Получаем кнопку и тело документа
+const toggleBtn = document.getElementById('toggle-theme');
+const body = document.body;
+
+// Функция для чтения cookie
+function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([.$?*|{}()[]\/+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+// Функция для записи cookie
+function setCookie(name, value, options = {}) {
+    options = {
+        path: '/',
+        ...options
+    };
+
+    if (options.expires instanceof Date) {
+        options.expires = options.expires.toUTCString();
+    }
+
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+    for (let optionKey in options) {
+        updatedCookie += "; " + optionKey;
+        let optionValue = options[optionKey];
+        if (optionValue !== true) {
+            updatedCookie += "=" + optionValue;
+        }
+    }
+
+    document.cookie = updatedCookie;
+}
+
+// Читаем текущую тему из cookie
+const savedTheme = getCookie('theme');
+if (savedTheme) {
+    body.classList.add(savedTheme);  // Применяем сохраненную тему
+}
+
+// Обрабатываем клик по кнопке
+toggleBtn.addEventListener('click', function() {
+    // Переключаем класс темы
+    body.classList.toggle('dark-theme');
+
+    // Определяем текущую тему
+    let theme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+
+    // Сохраняем текущую тему в cookie
+    setCookie('theme', theme, { expires: new Date(Date.now() + 2592000000) });  // Срок действия cookie - 30 дней
+});
+
+  /*document.getElementById('toggle-theme').addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     
@@ -41,7 +95,7 @@ function loadTheme() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme: newTheme })
     });
-  });
+  });*/
   
   // Кнопка обновления данных
   document.getElementById('refresh-data').addEventListener('click', updateData);
