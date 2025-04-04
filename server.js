@@ -116,6 +116,22 @@ app.post('/logout', (req, res) => {
     });
 });
 
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js') || req.url.endsWith('.css')) {
+    res.set('Cache-Control', 'public, max-age=86400');
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  next();
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Необработанная ошибка:', err);
+});
+
 app.listen(3000, () => {
     console.log('Сервер запущен на http://localhost:3000');
     console.log('Кэш хранится в папке:', cacheDir);

@@ -15,9 +15,12 @@ function loadTheme() {
       document.documentElement.setAttribute('data-theme', theme);
     }
   }
+
+// Кнопка обновления данных
+document.getElementById('refresh-data').addEventListener('click', updateData);  
   
-  // Обновление данных
-  async function updateData() {
+// Обновление данных
+async function updateData() {
     const response = await fetch('/api/data');
     const data = await response.json();
     
@@ -83,22 +86,6 @@ toggleBtn.addEventListener('click', function() {
     // Сохраняем текущую тему в cookie
     setCookie('theme', theme, { expires: new Date(Date.now() + 2592000000) });  // Срок действия cookie - 30 дней
 });
-
-  /*document.getElementById('toggle-theme').addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    
-    fetch('/theme', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ theme: newTheme })
-    });
-  });*/
-  
-  // Кнопка обновления данных
-  document.getElementById('refresh-data').addEventListener('click', updateData);
   
   // Инициализация
   loadTheme();
