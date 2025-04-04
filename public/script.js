@@ -23,16 +23,17 @@ document.getElementById('refresh-data').addEventListener('click', updateData);
 async function updateData() {
     const response = await fetch('/api/data');
     const data = await response.json();
+    console.log(data);
     
     document.getElementById('data-container').innerHTML = `
       <h3>Данные API</h3>
       <p><strong>Источник:</strong> ${data.source}</p>
       <p><strong>Время генерации:</strong> ${new Date(data.timestamp).toLocaleTimeString()}</p>
-      <pre>${JSON.stringify(data.items, null, 2)}</pre>
+      
     `;
   }
   
-  // Смена темы
+// Смена темы
 // Получаем кнопку и тело документа
 const toggleBtn = document.getElementById('toggle-theme');
 const body = document.body;
@@ -122,6 +123,7 @@ toggleBtn.addEventListener('click', function() {
         } catch (err) {
             showError('Ошибка соединения');
         }
+        document.querySelector(".controls").style.display = "block"; 
     });
     
     // Обработчик выхода
